@@ -3,7 +3,7 @@ import boston.main
 
 
 # Cargamos los datos en memoria
-crimes = pandas.read_csv("crimes_dataset.csv", sep=";")
+crimes = pandas.read_csv("./data/crimes_dataset.csv", sep=";")
 
 
 # A continuación exportamos las gráficas que se usarán en la presentación para el cliente

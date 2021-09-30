@@ -5,11 +5,29 @@ import sklearn.neighbors
 import sklearn.preprocessing
 import typing
 import pickle
+import os
 
 import matplotlib
 import seaborn
 
 #TODO: Comentarios y tests
+
+def create_directory_if_not_exists(path: str) -> None:
+    """
+    Esta función comprueba si el directorio existe, y en caso de que no sea así, lo crea.
+    """
+
+    if not os.path.isdir(path):
+        try:
+            os.mkdir(path)
+        except OSError:
+            print(f"Creation of the directory {path} failed")
+        else:
+            print(f"Successfully created the directory {path}")
+
+    else:
+        print(f"Directory {path} already exists.")
+    
 
 def get_graphs(crimes: pandas.DataFrame) -> None:
     """
@@ -21,33 +39,36 @@ def get_graphs(crimes: pandas.DataFrame) -> None:
     crimes["LONGITUDE"] = crimes.apply(lambda row: float(row.Location[1:-1].split(",")[1]), axis=1)
     crimes.drop(crimes[crimes.LATITUDE < 5].index, inplace=True)
 
+    # Se comprueba si existe el directorio dónde se van a almacenar las gráficas; si no existe, se crea.
+    create_directory_if_not_exists("./graphs")
+
     seaborn.displot(crimes['MONTH'])
     matplotlib.pyplot.ylabel('Frequency')
     matplotlib.pyplot.title('Distribution')
     matplotlib.pyplot.xticks(list(range(1,13,1)))
-    matplotlib.pyplot.savefig("month_distribution.png")
+    matplotlib.pyplot.savefig("./graphs/month_distribution.png")
 
     crimes['DAY_OF_WEEK'].value_counts().plot(kind='bar')
     matplotlib.pyplot.ylabel('Frequency')
     matplotlib.pyplot.title('Distribution')
-    matplotlib.pyplot.savefig("weekday_distribution.png")
+    matplotlib.pyplot.savefig("./graphs/weekday_distribution.png")
 
     seaborn.histplot(crimes['HOUR'])
     matplotlib.pyplot.ylabel('Frequency')
     matplotlib.pyplot.title('Distribution')
-    matplotlib.pyplot.savefig("hour_distribution.png")
+    matplotlib.pyplot.savefig("./graphs/hour_distribution.png")
 
     seaborn.scatterplot(x='LATITUDE',
                         y='LONGITUDE',
                         hue="UCR_PART",
                         data=crimes)
-    matplotlib.pyplot.savefig("ucr_by_location.png")
+    matplotlib.pyplot.savefig("./graphs/ucr_by_location.png")
 
     seaborn.scatterplot(x='LATITUDE',
                         y='LONGITUDE',
                         hue="HOUR",
                         data=crimes)
-    matplotlib.pyplot.savefig("hour_by_location.png")
+    matplotlib.pyplot.savefig("./graphs/hour_by_location.png")
 
 
 
@@ -71,9 +92,17 @@ def train_model_knn(crimes: pandas.DataFrame) -> typing.Tuple[sklearn.neighbors.
     neigh = sklearn.neighbors.KNeighborsClassifier(n_neighbors=5)
     neigh.fit(features_train, ucr_train)
 
-    outfile = open("knn.pkl",'wb')
+    # Se comprueba la existencia del directorio mdo
+    create_directory_if_not_exists("./models")
+
+    outfile = open("./models/knn.pkl",'wb')
     pickle.dump(neigh,outfile)
     outfile.close()
+
+    outfile = open("./models/encoder.pkl",'wb')
+    pickle.dump(ucr_encoder, outfile)
+    outfile.close()
+
 
     ucr_pred = neigh.predict(features_test)
 
