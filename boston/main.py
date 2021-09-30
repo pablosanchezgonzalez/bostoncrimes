@@ -19,16 +19,16 @@ def create_directory_if_not_exists(path: str) -> None:
         path (str): route to directory to be created
     """
 
-    if not os.path.isdir(path):
-        try:
+    try:
+        if not os.path.isdir(path):
             os.mkdir(path)
-        except OSError:
-            print(f"Creation of the directory {path} failed")
         else:
-            print(f"Successfully created the directory {path}")
-
+            print(f"Directory {path} already exists.")
+    except TypeError:
+        print(f"Creation of the directory {path} failed")
     else:
-        print(f"Directory {path} already exists.")
+        print(f"Successfully created the directory {path}")
+
     
 
 def get_graphs(crimes: pandas.DataFrame) -> None:
