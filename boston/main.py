@@ -10,11 +10,13 @@ import os
 import matplotlib
 import seaborn
 
-#TODO: Comentarios y tests
+#TODO: Comentarios
 
 def create_directory_if_not_exists(path: str) -> None:
-    """
-    Esta función comprueba si el directorio existe, y en caso de que no sea así, lo crea.
+    """This function checks if a directory exists ans if not creates it
+
+    Args:
+        path (str): route to directory to be created
     """
 
     if not os.path.isdir(path):
@@ -30,9 +32,10 @@ def create_directory_if_not_exists(path: str) -> None:
     
 
 def get_graphs(crimes: pandas.DataFrame) -> None:
-    """
-    Esta función sirve para obtener imagenes respresentativas del conjunto de datos con el fin de
-    emplearlas en la presentación.
+    """The purpose of this function is to obtain representative images of the dataset to make a presentation.
+
+    Args:
+        crimes (pandas.DataFrame): Boston crimes dataset
     """
     #Intentar evitar lambdas
     crimes["LATITUDE"] = crimes.apply(lambda row: float(row.Location[1:-1].split(",")[0]), axis=1)
@@ -73,9 +76,13 @@ def get_graphs(crimes: pandas.DataFrame) -> None:
 
 
 def train_model_knn(crimes: pandas.DataFrame) -> typing.Tuple[sklearn.neighbors.KNeighborsClassifier, float, sklearn.preprocessing.LabelEncoder]:
-    """
-    Esta función entrena un modelo de k vecinos más cercanos dado el dataframe de crimenes de Boston
-    asumiendo que la variable objetivo es 'UCR_PART'
+    """This function trains a knn model to predict 'UCR_PART' given the boston crimes dataset.
+
+    Args:
+        crimes (pandas.DataFrame): Boston crimes dataset
+
+    Returns:
+        typing.Tuple[sklearn.neighbors.KNeighborsClassifier, float, sklearn.preprocessing.LabelEncoder]: Tuple with the model, its accuracy and the encoder of UCR_PART.
     """
 
     #Nombres más descriptivos
