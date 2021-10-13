@@ -49,29 +49,35 @@ def get_graphs(crimes: pandas.DataFrame) -> None:
     matplotlib.pyplot.ylabel('Frequency')
     matplotlib.pyplot.title('Distribution')
     matplotlib.pyplot.xticks(list(range(1,13,1)))
-    matplotlib.pyplot.savefig("./graphs/month_distribution.png")
+    matplotlib.pyplot.savefig("./graphs/month_distribution.png", bbox_inches='tight')
+    matplotlib.pyplot.clf()
 
     crimes['DAY_OF_WEEK'].value_counts().plot(kind='bar')
     matplotlib.pyplot.ylabel('Frequency')
     matplotlib.pyplot.title('Distribution')
-    matplotlib.pyplot.savefig("./graphs/weekday_distribution.png")
+    matplotlib.pyplot.savefig("./graphs/weekday_distribution.png", bbox_inches='tight')
+    matplotlib.pyplot.clf()
 
     seaborn.histplot(crimes['HOUR'])
     matplotlib.pyplot.ylabel('Frequency')
     matplotlib.pyplot.title('Distribution')
-    matplotlib.pyplot.savefig("./graphs/hour_distribution.png")
+    matplotlib.pyplot.savefig("./graphs/hour_distribution.png", bbox_inches='tight')
+    matplotlib.pyplot.clf()
 
+    matplotlib.pyplot.tight_layout()
     seaborn.scatterplot(x='LATITUDE',
                         y='LONGITUDE',
                         hue="UCR_PART",
                         data=crimes)
-    matplotlib.pyplot.savefig("./graphs/ucr_by_location.png")
+    matplotlib.pyplot.savefig("./graphs/ucr_by_location.png", bbox_inches='tight')
+    matplotlib.pyplot.clf()
 
     seaborn.scatterplot(x='LATITUDE',
                         y='LONGITUDE',
                         hue="HOUR",
                         data=crimes)
-    matplotlib.pyplot.savefig("./graphs/hour_by_location.png")
+    matplotlib.pyplot.savefig("./graphs/hour_by_location.png", bbox_inches='tight')
+    matplotlib.pyplot.clf()
 
 
 
